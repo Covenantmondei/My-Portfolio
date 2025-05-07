@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Received</title>
+    <style>
+        :root {
+            --primary: #64ffda;
+            --secondary: #ccd6f6;
+            --dark: #0a192f;
+            --darker: #020c1b;
+            --gray: #8892b0;
+        }
+        body {
+            background: var(--darker);
+            color: var(--secondary);
+            font-family: 'Fira Code', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .success-terminal {
+            width: 90%;
+            max-width: 600px;
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            box-shadow: 0 0 25px rgba(100, 255, 218, 0.2);
+            overflow: hidden;
+        }
+        .terminal-header {
+            background: var(--dark);
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--primary);
+        }
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+        .terminal-body {
+            padding: 2rem;
+            position: relative;
+        }
+        .command-line {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .prompt {
+            color: var(--primary);
+        }
+        .success-message {
+            margin: 1.5rem 0;
+            line-height: 1.6;
+        }
+        .countdown {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            color: var(--gray);
+        }
+        .countdown-number {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        .progress-bar {
+            height: 2px;
+            background: rgba(100, 255, 218, 0.2);
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 100%;
+            background: var(--primary);
+            transform-origin: left;
+            animation: progress 5s linear forwards;
+        }
+        @keyframes progress {
+            0% { transform: scaleX(0); }
+            100% { transform: scaleX(1); }
+        }
+        .manual-return {
+            margin-top: 1.5rem;
+        }
+        .return-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 0.5rem 1rem;
+            font-family: 'Fira Code', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .return-btn:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="success-terminal">
+        <div class="terminal-header">
+            <div class="terminal-dots">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+            </div>
+        </div>
+        <div class="terminal-body">
+            <div class="command-line">
+                <span class="prompt">$</span>
+                <span>message_status --check</span>
+            </div>
+            <div class="success-message">
+                <p>> <span style="color: var(--primary)">RECEIVED</span></p>
+                <p>> Thank you for contacting me. I'll get back to you soon</p>
+                <p>> Returning to homepage...</p>
+            </div>
+            <div class="countdown">
+                <span>Auto-redirect in</span>
+                <span class="countdown-number" id="count">8</span>
+                <span>seconds</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="manual-return">
+                <button class="return-btn" id="returnBtn">
+                    > Click to return immediately
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Countdown functionality
+        const countElement = document.getElementById('count');
+        const returnBtn = document.getElementById('returnBtn');
+        let seconds = 8;
+        let countdownActive = true;
+
+        // Update countdown every second
+        const countdown = setInterval(() => {
+            seconds--;
+            countElement.textContent = seconds;
+            
+            if (seconds <= 0 && countdownActive) {
+                clearInterval(countdown);
+                window.location.href = "index.html"; // Redirect to homepage
+            }
+        }, 1000);
+
+        // Immediate return button
+        returnBtn.addEventListener('click', () => {
+            countdownActive = false;
+            clearInterval(countdown);
+            window.location.href = "index.html"; // Redirect to homepage
+        });
+
+        // Optional: Keyboard shortcut (Enter key)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                countdownActive = false;
+                clearInterval(countdown);
+                window.location.href = "index.html"; // Redirect to homepage
+            }
+        });
+    </script>
+</body>
+</html>
